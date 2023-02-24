@@ -81,16 +81,19 @@ jobs:
           $env:BOOST_ROOT = 'C:\boost'
           mkdir build
           cd build
-          cmake -DBOOST_ROOT=c:/boost -DBoost_DEBUG=ON ../ -DPATCH_VERSION=${{ github.run_number }}
-      - name: Running cmake 
-        run: |
-            cmake --build .
+          cmake -DBOOST_ROOT=c:/boost -DPATCH_VERSION=${{ github.run_number }} ../
+      - name: Running cmake
+        if: success() || failure()
+        shell: cmd
+        run: cmake --build . --config Release
       - name: Run tests
-        run: |
-            cmake --build . --target RUN_TESTS
+        if: success() || failure()
+        shell: cmd
+        run: cmake --build . --target RUN_TESTS
       - name: Create package
-        run: |
-            cmake --build . --target package
+        if: success() || failure()
+        shell: cmd
+        run: cmake --build . --target package
       - name: Create Release
         id: create_release
         uses: actions/create-release@v1
