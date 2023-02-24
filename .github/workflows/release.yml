@@ -24,7 +24,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           tag_name: ${{ github.run_number }}
-          release_name: Release ${{ github.run_number }}
+          release_name: Release helloworld-0.0.${{ github.run_number }}
           draft: false
           prerelease: false
       - name: Upload Release Asset
@@ -41,10 +41,47 @@ jobs:
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v2
-        with:
-          submodules: true
-      - run: cmake . -DPATCH_VERSION=${{ github.run_number }}
-      - run: cmake --build .
+      - name: Download Boost
+        shell: powershell
+        run: |
+          $uri = 'https://boostorg.jfrog.io/artifactory/main/release/1.81.0/source/boost_1_81_0.zip'
+          [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
+          Invoke-WebRequest -Uri $uri -OutFile C:\boost.zip -UserAgent [Microsoft.PowerShell.Commands.PSUserAgent]::Chrome
+      - name: Unzip boost
+        run: Expand-Archive -LiteralPath 'C:\boost.zip' -DestinationPath C:\install\
+      - name: Run bootstrap
+        shell: powershell
+        run: |
+          cd C:\install\boost_1_81_0\tools\build\
+          .\bootstrap.bat
+      - name: Install Boost
+        continue-on-error: true
+        shell: powershell
+        run: |
+          cd C:\install\boost_1_81_0\tools\build\
+          .\b2 --with-system --with-program_options --with-serialization --with-test --build-type=complete -j2 --prefix="C:\boost-build" install
+          $env:Path += ";C:\boost-build\bin"
+          cd C:\install\boost_1_81_0
+          C:\boost-build\bin\b2.exe --with-system --with-program_options --with-serialization --with-test --build-type=complete -j2 --build-dir="C:\install\boost_1_81_0\build" --build-type=complete --prefix="C:\boost" install
+      - name: Check libs names
+        if: success() || failure()
+        run: |
+          cd c:\boost\lib
+          Get-ChildItem
+      - name: Running cmake
+        if: success() || failure()
+        run: |
+          $env:BOOST_INCLUDEDIR = 'C:\boost\include'
+          $env:BOOST_LIBRARYDIR = 'C:\boost\lib'
+          $env:BOOST_ROOT = 'C:\boost'
+          mkdir build
+          cd build
+          cmake -DBOOST_ROOT=c:/boost -DBoost_DEBUG=ON ../
+      - name: Running make (MinGW Makefiles)
+        if: success() || failure()
+        run: |
+          cd build
+          make
       - run: cmake --build . --target test
       - run: cmake --build . --target package
       - name: Create Release
@@ -54,7 +91,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           tag_name: ${{ github.run_number }}
-          release_name: Release ${{ github.run_number }}
+          release_name: Release helloworld-0.0.${{ github.run_number }}
           draft: false
           prerelease: false
       - name: Upload Release Asset
@@ -64,6 +101,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./helloworld-0.0.${{ github.run_number }}-Linux.deb
-          asset_name: helloworld-0.0.${{ github.run_number }}-Linux.deb
-          asset_content_type: application/vnd.debian.binary-package
+          asset_path: ./helloworld-0.0.${{ github.run_number }}-win.zip
+          asset_name: helloworld-0.0.${{ github.run_number }}-win.zip
+          asset_content_type: application/zip
