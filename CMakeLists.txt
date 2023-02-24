@@ -5,6 +5,7 @@ set(PROJECT_VESRION 0.0.${PATCH_VERSION})
 project(helloworld VERSION ${PROJECT_VESRION})
 
 message("Target system: ${CMAKE_HOST_SYSTEM_NAME}")
+# Boost Add Windows area
 if (WIN32)
     if("${CMAKE_SIZEOF_VOID_P}" STREQUAL "4")
         set (X86 TRUE)
@@ -100,21 +101,19 @@ endif()
 
 install (TARGETS helloworld_cli RUNTIME DESTINATION bin)
 
+
+# CPack area
 if (WIN32)
     set(CPACK_GENERATOR "ZIP")
 else ()
     set(CPACK_GENERATOR "DEB")
 endif()
-
-
 set(CPACK_PACKAGE_VERSION_MAJOR "${PROJECT_VERSION_MAJOR}")
 set(CPACK_PACKAGE_VERSION_MINOR "${PROJECT_VERSION_MINOR}")
 set(CPACK_PACKAGE_VERSION_PATCH "${PROJECT_VERSION_PATCH}")
-
 set(CPACK_PACKAGE_CONTACT https://github.com/4l3x777/homework1)
-
 include(CPack)
 
+# Tests area
 enable_testing()
-
-add_test(test_version test_version)
+add_test(NAME unit_tests_test_version_boost COMMAND test_version_boost)
