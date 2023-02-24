@@ -59,10 +59,10 @@ jobs:
         shell: powershell
         run: |
           cd C:\install\boost_1_81_0\tools\build\
-          .\b2 --with-system --with-program_options --with-serialization --with-test --build-type=complete -j2 --prefix="C:\boost-build" install
+          .\b2 --with-system --with-program_options --with-serialization --with-test --build-type=complete -j2 --prefix="C:\boost-build" address-model=64 install
           $env:Path += ";C:\boost-build\bin"
           cd C:\install\boost_1_81_0
-          C:\boost-build\bin\b2.exe --with-system --with-program_options --with-serialization --with-test --build-type=complete -j2 --build-dir="C:\install\boost_1_81_0\build" --build-type=complete --prefix="C:\boost" install
+          C:\boost-build\b2.exe --with-system --with-program_options --with-serialization --with-test --build-type=complete -j2 --build-dir="C:\install\boost_1_81_0\build" --build-type=complete --prefix="C:\boost" address-model=64 install
       - name: Check libs names
         if: success() || failure()
         run: |
@@ -77,11 +77,6 @@ jobs:
           mkdir build
           cd build
           cmake -DBOOST_ROOT=c:/boost -DBoost_DEBUG=ON ../
-      - name: Running make (MinGW Makefiles)
-        if: success() || failure()
-        run: |
-          cd build
-          make
       - run: cmake --build . --target test
       - run: cmake --build . --target package
       - name: Create Release
