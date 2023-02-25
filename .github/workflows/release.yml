@@ -29,7 +29,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           tag_name: ${{ github.run_number }}
-          release_name: Release Linux helloworld-0.0.${{ github.run_number }}
+          release_name: helloworld-0.0.${{ github.run_number }}
           draft: false
           prerelease: false
           allowUpdates: true
@@ -107,7 +107,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           tag_name: ${{ github.run_number }}
-          release_name: Release Windows helloworld-0.0.${{ github.run_number }}
+          release_name: helloworld-0.0.${{ github.run_number }}
           draft: false
           prerelease: false
           allowUpdates: true
