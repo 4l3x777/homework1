@@ -86,8 +86,8 @@ jobs:
         if: success() || failure()
         shell: cmd
         run: |
-        cd build
-        cmake --build . --config Release
+          cd build
+          cmake --build . --config Release
       - name: Run tests
         if: success() || failure()
         shell: cmd
