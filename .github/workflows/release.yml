@@ -61,13 +61,13 @@ jobs:
         run: cmake . -DPATCH_VERSION=${{ github.run_number }}
       
       - name: Running cmake 
-        run: cmake --build . --config Release -DPATCH_VERSION=${{ github.run_number }}
+        run: cmake --build . --config Release
       
       - name: Run tests  
-        run: cmake --build . --target test --config Release -DPATCH_VERSION=${{ github.run_number }}
+        run: cmake --build . --target test --config Release
       
       - name: Create package
-        run: cmake --build . --target package --config Release -DPATCH_VERSION=${{ github.run_number }}
+        run: cmake --build . --target package --config Release
         
       - name: Upload Linux artifact
         uses: actions/upload-artifact@v1
@@ -91,19 +91,19 @@ jobs:
         shell: cmd
         run: |
           cd build
-          cmake --build . --config Release -DPATCH_VERSION=${{ github.run_number }}
+          cmake --build . --config Release
           
       - name: Run tests
         shell: cmd
         run: |
           cd build
-          cmake --build . --target RUN_TESTS --config Release -DPATCH_VERSION=${{ github.run_number }}
+          cmake --build . --target RUN_TESTS --config Release
           
       - name: Create package
         shell: cmd
         run: |
           cd build
-          cmake --build . --target package --config Release -DPATCH_VERSION=${{ github.run_number }}
+          cmake --build . --target package --config Release
           
       - name: Upload Windows artifact
         uses: actions/upload-artifact@v1
