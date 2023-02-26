@@ -27,12 +27,6 @@ FetchContent_Declare(
     GIT_TAG boost-1.81.0
 )
 
-FetchContent_GetProperties(Boost)
-if (NOT Boost_POPULATED)
-    FetchContent_Populate(Boost)
-    add_subdirectory(${Boost_SOURCE_DIR} ${Boost_BINARY_DIR})
-endif ()
-
 configure_file(
     version.h.in 
     version.h    
