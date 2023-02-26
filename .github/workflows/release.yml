@@ -3,7 +3,7 @@ name: 'HOMEWORK1 C++ CI/CD'
 on:
   push:
     branches:
-      - workflows_release
+      - main
 
 jobs:
   upload-release:
