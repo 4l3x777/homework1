@@ -81,28 +81,26 @@ jobs:
       - uses: actions/checkout@v2
               
       - name: Set PATCH_VERSION
-        if: success() || failure()
+        shell: cmd
         run: |
           mkdir build
           cd build
           cmake -DPATCH_VERSION=${{ github.run_number }} ../
           
       - name: Running cmake
-        if: success() || failure()
         shell: cmd
         run: |
           cd build
           cmake --build . --config Release
           
       - name: Run tests
-        if: success() || failure()
         shell: cmd
         run: |
           cd build
           cmake --build . --target RUN_TESTS --config Release
           
       - name: Create package
-        if: success() || failure()
+        shell: cmd
         run: |
           cd build
           cmake --build . --target package --config Release         
