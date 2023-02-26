@@ -3,6 +3,7 @@ build
 
 # VSCode
 .vscode
+BOOST_WINDOWS.md
 
 # Prerequisites
 *.d
