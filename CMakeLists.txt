@@ -30,7 +30,7 @@ FetchContent_Declare(
 FetchContent_GetProperties(Boost)
 if (NOT Boost_POPULATED)
     FetchContent_Populate(Boost)
-    add_subdirectory(${Boost_SOURCE_DIR} ${Boost_BINARY_DIR} EXCLUDE_FROM_ALL)
+    add_subdirectory(${Boost_SOURCE_DIR} ${Boost_BINARY_DIR})
 endif ()
 
 configure_file(
